@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+
+    <!-- compiled css output -->
+    <link href="css/ionic.app.css" rel="stylesheet">
+    
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    
+    <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
+    <script src="lib/ng-cordova-oauth/dist/ng-cordova-oauth.min.js"></script>
+    <script src="lib/angular-spotify/dist/angular-spotify.min.js"></script>
+ 
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="core/js/app.js"></script>
+    <script src="core/js/utils.js"></script>
+    <script src="core/js/routes.js"></script>
+    <!--script src="js/services.js"></script-->
+    
+    
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+    
+    
+    <!--app core modules-->
+    <script src="core/js/controllers/core.controller.js"></script>
+    <script src="core/js/services/core.service.js"></script>
+    <script src="core/js/directives/core.directives.js"></script>
+    <script src="core/js/PushNotification.js"></script>
+    <script src="core/js/services/feed.service.js"></script>
+    <script src="core/js/services/camera.service.js"></script>
+    <!--script src="core/js/utils.js"></script-->
+    <script src="core/js/controllers.js"></script> <!--old-->
+    <script src="core/js/services/push.service.js"></script>
+    
+    <!--app modules-->
+    <script src="users/services/user.service.js"></script>    
+    <script src="users/controllers/user.controller.js"></script>
+    
+    
+  </head>
+  
+    <body ng-app="miybndMobile">
+        
+        <ion-nav-bar >
+            <ion-nav-back-button ></ion-nav-back-button>
+        </ion-nav-bar>
+        
+        <ion-nav-view class="background"></ion-nav-view>
+    </body>
+  
+</html>
+   

@@ -1,0 +1,38 @@
+<!--ion-tabs ng-class="{'tabs-item-hide': hideTabs}"  class="tabs-dark tabs-icon-only" STYLE="background-color:#100c08">
+
+  <ion-tab title="MyBND" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" ui-sref="app.home">
+    <ion-nav-view name="home"></ion-nav-view>
+  </ion-tab>
+
+   
+  <ion-tab title="Songs" icon-on="ion-ios-musical-notes" icon-off="ion-ios-musical-notes" href="#/app/songs?status=active">
+    <ion-nav-view name="songs" class="bar-stable"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="About" icon-on="mdi mdi-library-music" icon-off="mdi mdi-library-music">
+  </ion-tab>
+
+  <ion-tab title="Settings" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" ng-controller="AuthCtrl" ng-click="logout()"">
+      <ion-nav-view name="options"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs-->
+
+<ion-view style="" title="homeTab">
+
+
+    <ion-tabs style="" class="tabs-stable tabs-icon-only">
+        <ion-tab style="" title="Home" icon="ion-home" ui-sref="app.home">
+            <ion-nav-view name="home"></ion-nav-view>
+        </ion-tab>
+        <ion-tab style="" title="Songs" icon="ion-music-note" >
+            <ion-nav-view name="Songs"></ion-nav-view>
+        </ion-tab>
+        <ion-tab style="" title="Setlists" icon="ion-folder">
+            <ion-nav-view name="Setlist"></ion-nav-view>
+        </ion-tab>
+        <ion-tab style="" title="Profile" icon="ion-android-settings" ui-sref="app.profile">
+            <ion-nav-view name="profile"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</ion-view>
