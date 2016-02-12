@@ -9,3 +9,4 @@ https://ionicthemes.com/tutorials/about/native-facebook-login-with-ionic-framewo
 Phonegap Facebook Plugin
 
 cordova -d plugin add E:\apps\projetos\miybndMobile\phonegap-facebook-plugin --variable APP_ID="162584200776112" --variable APP_NAME="MIYBND - Test1"
+asd
