@@ -1,0 +1,16 @@
+
+<label class="item item-input item-select">
+    <div class="input-label">Channel</div>
+    <select ng-model="profile.channel">
+        <option ng-repeat="channel in channelList" value="{{channel.code}}">{{channel.name}}</option>
+    </select>
+</label>
+
+<label class="item item-input">
+    <input type="text" placeholder="Description" ng-model="profile.name"></input>
+</label>
+
+<label class="item item-input">
+    <input type="text" placeholder="Url" ng-model="profile.url"></input>
+</label>
+

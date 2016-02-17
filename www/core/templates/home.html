@@ -1,5 +1,42 @@
 <ion-view view-title="{{homeTitle}}" class="bar-stable discover-page" >
 <ion-nav-title>{{homeTitle}}</ion-nav-title>
+
+ 	<!--NAVIGATION MENU START-->	
+	<ion-nav-buttons side="right">
+		<div>
+			<md-menu md-position-mode="target-right target" md-offset="0 -10">
+				<!--menu trigger-->
+				<md-button   aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+					<i class="button button-icon ion-grid center"></i>
+				</md-button>
+
+				<!--Start content-->
+				<md-menu-content width="4">
+					<md-menu-item>
+						<md-button ng-click="showProfile()">
+							<div layout="row">
+								<p flex>Profile</p>
+								<i ng-class="{'ion-checkmark': filterStatus == 'active'}" style="margin: auto 3px auto 0;"></i>
+							</div>
+						</md-button>
+					</md-menu-item>
+				
+					<md-menu-item>
+						<md-button ng-click="listFilter('unrated')">
+							<div layout="row">
+								<p flex>Bands</p>
+								<i class="ion ion-checkmark" ng-show="filterStatus == 'unrated'"></i>
+							</div>
+						</md-button>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
+		</div>
+	</ion-nav-buttons>
+	<!--NAVIGATION MENU END-->
+
+
+
   <ion-content>
     <div class="row">
       <div class="col">
@@ -20,6 +57,12 @@
           
         <a class="button" ng-click="savePicture()">Save Picture</a>
       </div>
+
+      
     </div>
+    
+  
+     
+
   </ion-content>
 </ion-view>

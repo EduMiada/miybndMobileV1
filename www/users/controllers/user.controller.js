@@ -43,10 +43,160 @@ function($scope,$ionicHistory, $state, User, $q, $ionicLoading ){
    
 }])
 
-.controller('UserCtrl', ['$scope', '$ionicHistory', '$state', 'User', '$q', '$ionicLoading',  '$ionicActionSheet',  '$timeout', 'Camera',  
-function($scope,$ionicHistory, $state, User, $q, $ionicLoading, $ionicActionSheet, $timeout, Camera ){
+.controller('UserCtrl', ['$scope', '$ionicHistory', '$state', 'User', '$q', '$ionicLoading',  '$ionicActionSheet',  '$timeout', 'Camera',  'Util','$ionicModal', '$ionicPopup', 
+function($scope,$ionicHistory, $state, User, $q, $ionicLoading, $ionicActionSheet, $timeout, Camera, Util, $ionicModal, $ionicPopup ){
     $scope.user = User;
-  //$ionicHistory.clearHistory();
+    $scope.profile = {
+        about: '',
+        channel:{},
+        url:'',
+        name:''
+    }
+    
+    
+     $scope.$on('$ionicView.loaded', function () {
+        User.loadProfile().then(function(){
+            $scope.instrumentList = Util.instrumentList;
+            $scope.channelList = Util.channelList;
+            $scope.user.profile = User.profile;
+        });
+    });
+    
+    
+    // Check if provider is already in use with current user
+    $scope.isConnectedSocialAccount = function(provider) {			
+        return ($scope.user.spotifyToken);
+    };
+    
+    $scope.connectSpotify = function(){
+       User.connectSpotify();
+    }
+    
+    $scope.disconnectSpotify = function(){
+        User.disconnectSpotify().then(function(){});        
+    };
+    
+   
+    
+    $scope.updateProfile = function(){
+        User.updateProfile($scope.user.profile, false, false)
+        .then(function(response){
+            $scope.closeModal();
+        });
+    };
+  
+    //channel popup
+    $scope.addChannel = function(){
+              
+        // An elaborate, custom popup
+        var myPopup = $ionicPopup.show({
+            templateUrl: 'users/templates/modalAddChannel.html',
+            title: 'Add a channel Url',
+            //subTitle: 'Please use normal things',
+            scope: $scope,
+            buttons: [
+            { text: 'Cancel' },
+            {
+                text: '<b>Save</b>',
+                type: 'button-positive',
+                onTap: function(e) {
+                if (!$scope.profile.channel || !$scope.profile.url) {
+                    //don't allow the user to close unless he enters wifi password
+                    e.preventDefault();
+                } else {
+                    
+                    if (!$scope.user.channels) $scope.user.channels = [];
+                                        
+                    $scope.user.channels.push({channel:$scope.profile.channel, url:$scope.profile.url, name: $scope.profile.name});
+
+                    return User.updateProfile(false, false,  $scope.user.channels)
+                    .then(function(response){
+                        $scope.profile.channel = '';
+                        $scope.profile.url = '';
+                        $scope.profile.name= '';
+                        $scope.closeModal();
+                    });
+                                        
+                    //return $scope.updateProfile();
+                }
+                }
+            }
+            ]
+        });
+        
+    };
+    
+
+    $scope.removeChannel = function(index){
+                           
+        $scope.user.channels.splice(index,1);
+
+        return User.updateProfile(false, false,  $scope.user.channels)
+            .then(function(response){});
+                     
+    }
+  
+  $scope.showPopup = function() {
+      
+     $scope.profile.about = $scope.user.profile.about;
+      
+  // An elaborate, custom popup
+  var myPopup = $ionicPopup.show({
+    templateUrl: 'users/templates/modalEditAbout.html',
+    title: 'Say something about yourself',
+    //subTitle: 'Please use normal things',
+    scope: $scope,
+    buttons: [
+      { text: 'Cancel' },
+      {
+        text: '<b>Save</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.profile.about) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          } else {
+
+                if ($scope.profile.about) $scope.user.profile.about = $scope.profile.about;
+                $scope.profile.about = ''; 
+                return $scope.updateProfile();
+          }
+        }
+      }
+    ]
+  });
+  
+  }
+   
+    $ionicModal.fromTemplateUrl('users/templates/modalEditAbout.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+
+  
+  $scope.openModal = function() {
+    $scope.profile.about = $scope.user.profile.about;
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+   
+   
   
     $scope.openPictureOptions = function() {
         $ionicActionSheet.show({
@@ -64,15 +214,17 @@ function($scope,$ionicHistory, $state, User, $q, $ionicLoading, $ionicActionShee
                         Camera.getGalery().then(function(imageData) {
                             $scope.picture = "data:image/jpeg;base64," + imageData;
                         
-                            User.setProfilePicture($scope.picture)
-                            .then(function(response){
-                                    $scope.user.picture = $scope.picture;                                   
-                                    return true;                              
-                            });
+                            User.setProfilePicture($scope.picture).then(function(response){
+                                $scope.user.picture = $scope.picture;                                                                 
+                            }).then(function(){
+                                return true;
+                            })
+                            
+                            return true;
                             
                         }, function(err) {
                                 console.err(err);
-                          
+                            return true;
                         });
 
                         break;
@@ -84,11 +236,13 @@ function($scope,$ionicHistory, $state, User, $q, $ionicLoading, $ionicActionShee
                             User.setProfilePicture($scope.picture)
                             .then(function(response){
                                 $scope.user.picture = $scope.picture;
+                            }).then(function(){
                                 return true;
-                            });
+                            })
 
                         }, function(err) {
                             console.err(err);
+                            return true;
                         });
                         
                         break;

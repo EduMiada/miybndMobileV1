@@ -21,36 +21,39 @@ angular.module('miybndMobile.controllers', [])
 })
 
 .controller('HomeCtrl', 
-function($scope, User, $state, Camera) {
+function($rootScope, $scope, User, $state, Camera, Util) {
     
     $scope.user = User;
     
-    var promise = new Promise(function(resolve, reject) {
-        
-        resolve($scope.user.bandName);
+    $scope.$on('$ionicView.loaded', function () {
+        $scope.homeTitle = $scope.user.bandName;
+        $scope.instrument = '';
+        $scope.instrumentList = Util.instrumentList;
     });
+    
+    //var promise = new Promise(function(resolve, reject) {    
+    //    resolve($scope.user.bandName);
+    //});
   
-    promise.then(function(title){
-        $scope.homeTitle = title;
+    //promise.then(function(title){
+    //    $scope.homeTitle = title;
     // Still does not work with the below uncommented
-         $scope.$apply();
-    });
+    //     $scope.$apply();
+    //});
     
     
     $scope.savePicture = function(){
-        console.log('Start Pic upload');
             User.setProfilePicture($scope.user.picture)
                 .then(function(response){
                     console.log(response);
                 });
-            
-        
-    }
+              
+    };
                             
+    $scope.showProfile = function(){
+        $state.go('app.profile');
+    };
     
-    
-    console.log($scope.user);
-  
     $scope.logout = function(){
         User.destroySession();
         $state.go('login');

@@ -15,7 +15,10 @@ angular.module('miybndMobile.services')
 			bands: [],
             fb:false,
             facebookToken:false,
-            spotifyToken:false
+            spotifyToken:false,
+            profile: {about:'', instrument:'', experience:'', styles:[], influencies:[]},
+            contact: {bio:'', city:'', area:'', zip:''},
+            channels: [{channel:'', name:'', url:''}]
 	}
 	
 	// attempt login or signup
@@ -112,6 +115,90 @@ angular.module('miybndMobile.services')
       });
     
     };
+    
+    
+    o.disconnectSpotify = function(){
+        var url = SERVER.API_URL +  SERVER.API_USERS + '/' + o.id + SERVER.API_USERS_ACCOUNTS;
+ 
+        //send code to server to create token and save to user profile
+        return $http.delete(url, {params:{provider:'spotify'}})
+            .success(function(response){
+             
+                
+                var user = $localstorage.getObject('user');
+                
+                console.log('user antes', user);
+                
+                try {
+                    if (user.data.additionalProvidersData['spotify']) delete user.data.additionalProvidersData['spotify'];
+                } catch (error) {
+                    console.log('error', error);
+                    o.spotifyToken = false;
+                }
+                
+                console.log('user deis', user);
+                
+                return o.setSessionAPI(user);
+        
+             
+        });
+        
+    };
+    
+     //update profile
+	o.loadProfile = function() {
+        var url = SERVER.API_URL +  SERVER.API_USERS + '/' + o.id + SERVER.API_USER_PROFILE;
+        
+        return $http.get(url)
+            .success(function(response){
+                o.profile = response.data.profile;
+                if (!o.profile.styles) o.profile.styles=[];
+                if (!o.profile.influencies) o.profile.influencies=[];
+             
+                o.contact = response.data.contact;
+                o.channels = response.data.channels;
+            })
+            .error(function(err){
+                return err;
+            });
+        
+        
+        
+	};
+    
+    
+    //update profile
+	o.updateProfile = function(profile, contact, channels) {
+        var defer = $q.defer();
+        var url = SERVER.API_URL +  SERVER.API_USERS + '/' + o.id + SERVER.API_USER_PROFILE;
+        
+        var ret = $http.post(url, {profile:profile, contact:contact, channels:channels} )
+			.success(function(response){
+                
+                alert(response.success);
+                //var user = $localstorage.getObject('user');
+                        
+                //if (user.token) {					
+                //    o.picture = picture;
+                //    user.picture = picture;     
+                //    $localstorage.setObject('user',  user );
+                //}		
+                
+                defer.resolve(true);
+                return defer.promise;
+            })
+            .error(function(err){
+            	defer.resolve(false);
+                return defer.promise;
+            });
+        
+        
+    	return defer.promise;
+        
+        
+        
+	};
+    
   
   // attempt login or signup
 	o.setProfilePicture = function(picture) {

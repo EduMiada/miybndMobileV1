@@ -27,6 +27,17 @@ angular.module('miybndMobile.routes', [])
       templateUrl: 'users/templates/login.html',
       controller: 'LoginCtrl'
     })
+    
+  //    .state('profile', {
+     // cache: true,
+  ///      url: '/profile',
+       // views: {
+        //'profile': {
+    //      templateUrl: 'users/templates/profile.html',
+    //      controller: 'UserCtrl'
+        //}
+      //}
+    //})
  
     .state('app', {
       url: '/app',
@@ -46,42 +57,50 @@ angular.module('miybndMobile.routes', [])
       },
     onEnter: 
       function($state, User, $ionicHistory){
-          console.log( 'aqui');
         User.checkSession().then(function(hasSession) {
          if (!hasSession){ 
             $ionicHistory.nextViewOptions({
                 disableAnimate: true,
                 disableBack: true
             });
-            console.log( 'dont have  session');
+            //console.log( 'dont have  session');
             $state.go('login')
          }
        });
-      }
-       /*,
+      }, 
+      
+      controller: function($scope){
+    $scope.homeTitle = 'Teste';
+  },
+      /*,
       
       resolve: {
-        xyz: function(Suggestions) {
-          Suggestions.initialize()
-          .then(function(){
-            return true;
-          });   
+        function($scope) {
+            $scope.homeTitle = 'Teste';
         }
-      }*/
-      
+      }
+      */
     })
     
     .state('app.profile', {
-     // cache: true,
-        url: '/profile',
+      cache: true,
+        url: 'profile',
         views: {
-        'profile': {
+        'home': {
           templateUrl: 'users/templates/profile.html',
           controller: 'UserCtrl'
         }
-      }
+      } /*,
+      
+      onEnter: 
+      function($state, User){
+        User.loadProfile().then(function(){
+           console.log('route onEnter');
+        });
+        
+      }*/
+      
     });
- 
         
     
   

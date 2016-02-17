@@ -21,7 +21,7 @@
 <ion-view style="" title="homeTab">
 
 
-    <ion-tabs style="" class="tabs-stable tabs-icon-only">
+    <ion-tabs ng-class="{'tabs-item-hide': hideTabs}" style="" class="tabs-stable tabs-icon-only">
         <ion-tab style="" title="Home" icon="ion-home" ui-sref="app.home">
             <ion-nav-view name="home"></ion-nav-view>
         </ion-tab>
@@ -31,8 +31,8 @@
         <ion-tab style="" title="Setlists" icon="ion-folder">
             <ion-nav-view name="Setlist"></ion-nav-view>
         </ion-tab>
-        <ion-tab style="" title="Profile" icon="ion-android-settings" ui-sref="app.profile">
+        <!--ion-tab style="" title="Profile" icon="ion-android-settings" ui-sref="app.profile">
             <ion-nav-view name="profile"></ion-nav-view>
-        </ion-tab>
+        </ion-tab-->
     </ion-tabs>
 </ion-view>
